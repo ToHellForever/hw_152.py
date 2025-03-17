@@ -49,15 +49,15 @@ class TxtFile(AbstractFile):
         """
         try:
             with open(self.file_path, "r", encoding="utf-8") as file:
-                clear_data: list[str] = [strong.strip() for strong in file.readlines()]
-                return clear_data
+                file_content: list[str] = [strong.strip() for strong in file.readlines()]
+                return file_content
             
         except FileNotFoundError:
             print("Файл не найден")
             return []
 
 
-    def write(self, *data: str) -> None:
+    def write(self, data: list[str]) -> None:
         """
         Записывает строки в текстовый файл, разделяя их переводами строк.
         """
@@ -67,9 +67,9 @@ class TxtFile(AbstractFile):
                 file.write(write_data)
         except Exception as e:
             print(f"Ошибка при записи в файл: {e}")
+            raise
 
-
-    def append(self, *data: str) -> None:
+    def append(self, data: list[str]) -> None:
         """
         Добавляет строки в конец текстового файла, разделяя их переводами строк.
         """
@@ -79,7 +79,7 @@ class TxtFile(AbstractFile):
                 file.write("\n" + write_data)
         except Exception as e:
             print(f"Ошибка при добавлении в файл: {e}")
-            
+            raise
             
             
 class JsonFile(AbstractFile):
@@ -147,6 +147,8 @@ class CsvFile(AbstractFile):
         """
         try:
             with open(self.file_path, "w", encoding="utf-8", newline="") as file:
+                if not data:
+                    return 
                 fieldnames: List[str] = data[0].keys()
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
                 writer.writeheader()

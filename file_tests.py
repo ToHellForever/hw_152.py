@@ -4,8 +4,8 @@ from file_classes import CsvFile
 
 if __name__ == "__main__":
     document = TxtFile("file.txt")
-    document.write("Hello", "World")
-    document.append("", "Goodbye", "World")
+    document.write(["строка 1", "строка 2", "строка 3"])
+    document.append(["строка 4", "строка 5"])
     print(document.read())
     
     
