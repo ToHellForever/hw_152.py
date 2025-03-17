@@ -3,7 +3,9 @@
 """
 
 from abc import ABC, abstractmethod
+
 import json
+import csv
 
 
 class AbstractFile(ABC):
@@ -122,3 +124,44 @@ class JsonFile(AbstractFile):
             print(f"Ошибка при добавлении в файл: {e}")
         
         
+        
+class CsvFile(AbstractFile):
+    """
+    Класс для работы с файлами в формате CSV.
+    """
+    def read(self) -> list[dict]:
+        """
+        Читает данные из CSV-файла и возвращает список словарей.
+        """
+        try:
+            with open(self.file_path, "r", encoding="utf-8") as file:
+                reader = csv.DictReader(file)
+                return list(reader)
+        except FileNotFoundError:
+            print("Файл не найден")
+            return []
+        
+    def write(self, data) -> None:
+        """
+        Записывает данные в CSV-файл.
+        """
+        try:
+            with open(self.file_path, "w", encoding="utf-8", newline="") as file:
+                fieldnames = data[0].keys()
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(data)
+        except Exception as e:
+            print(f"Ошибка при записи в файл: {e}")
+            
+    def append(self, data) -> None:
+            """
+            Добавляет данные в конец CSV-файла.
+            """
+            try:
+                with open(self.file_path, "a", encoding="utf-8", newline="") as file:
+                    fieldnames = data[0].keys()
+                    writer = csv.DictWriter(file, fieldnames=fieldnames)
+                    writer.writerows(data)
+            except Exception as e:
+                print(f"Ошибка при добавлении в файл: {e}")
