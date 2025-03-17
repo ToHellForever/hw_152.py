@@ -149,7 +149,7 @@ class CsvFile(AbstractFile):
             with open(self.file_path, "w", encoding="utf-8", newline="") as file:
                 if not data:
                     return 
-                fieldnames: List[str] = data[0].keys()
+                fieldnames: List[dict] = data[0].keys()
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(data)
