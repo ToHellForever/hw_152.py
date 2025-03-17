@@ -3,6 +3,7 @@
 """
 
 from abc import ABC, abstractmethod
+import json
 
 
 class AbstractFile(ABC):
@@ -77,3 +78,47 @@ class TxtFile(AbstractFile):
         except Exception as e:
             print(f"Ошибка при добавлении в файл: {e}")
             
+            
+            
+class JsonFile(AbstractFile):
+    """
+    Класс для работы с файлами в формате JSON.
+    """
+    def read(self) -> dict:
+        """
+        Читает данные из JSON-файла и возвращает словарь.
+        """
+        try:
+            with open(self.file_path, "r", encoding="utf-8") as file:
+                data = json.load(file)
+                return data
+            if not data:
+                return {}
+        except FileNotFoundError:
+            print("Файл не найден")
+            return {}
+        
+    def write(self, data) -> None:
+        """
+        Записывает данные в JSON-файл.
+        """
+        try:
+            with open(self.file_path, "w", encoding="utf-8") as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
+        except Exception as e:
+            print(f"Ошибка при записи в файл: {e}")
+            
+    def append(self, data) -> None:
+        """
+        Добавляет данные в конец JSON-файла.
+        """
+        try:
+            with open(self.file_path, "r", encoding="utf-8") as file:
+                existing_data = json.load(file)
+            existing_data.update(data)
+            with open(self.file_path, "w", encoding="utf-8") as file:
+                json.dump(existing_data, file, ensure_ascii=False, indent=4)
+        except Exception as e:
+            print(f"Ошибка при добавлении в файл: {e}")
+        
+        
